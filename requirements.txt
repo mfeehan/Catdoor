@@ -1,0 +1,6 @@
+pyserial
+bleak
+crc8
+PyYAML
+adafruit-circuitpython-vl53l1x
+RPi.GPIO

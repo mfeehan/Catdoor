@@ -1,0 +1,57 @@
+# Cat door controller configuration
+# Copy this file to config.yaml and edit before running.
+# config.yaml is gitignored.
+
+# ── BLE door ──────────────────────────────────────────────────────────────────
+# Discover your door's MAC address with:
+#   sudo bluetoothctl
+#   scan on
+# (look for a device named like "RC-..." and copy its MAC)
+door_mac: "AA:BB:CC:DD:EE:FF"
+
+# Write characteristic UUID. The default below worked on the unit tested
+# (firmware as of early 2026). If your door doesn't respond, enumerate
+# characteristics with:
+#   bluetoothctl -> connect <mac> -> menu gatt -> list-attributes
+write_char_uuid: "00000000-8e22-4541-9d4c-21edae82ed19"
+
+# ── RFID reader (FDX-B over UART) ─────────────────────────────────────────────
+serial_port: "/dev/ttyAMA0"
+baud_rate: 9600
+
+# ── Allowed pets ──────────────────────────────────────────────────────────────
+# Map name -> chip hex string. Discover chip IDs by running:
+#   python3 catdoor.py --scan
+# and presenting the chip to the reader. Copy the HEX value.
+# Both implanted chips and collar tags can be added.
+allowed_chips:
+  Pet1:        "0000000000000000000000000000"
+  Pet1_Collar: "0000000000000000000000000000"
+
+# ── GPIO pin assignments (BCM numbering) ──────────────────────────────────────
+pins:
+  motion:     27   # Unused but pulled down to prevent float (legacy)
+  btn_open:   22   # Yellow latching switch (manual hold-open)
+  btn_close:  23   # Red latching switch (manual hold-closed)
+  btn_green:  12   # Green latching switch (force full mode)
+  led_yellow: 17   # Open override indicator
+  led_red:    25   # Closed override indicator
+  led_green:   8   # Auto mode indicator (blinks if green button active)
+
+# ── ToF sensor (VL53L1X on I2C) ───────────────────────────────────────────────
+tof_threshold_mm: 50   # Trigger distance in millimeters
+
+# ── Door timing ───────────────────────────────────────────────────────────────
+hold_seconds:    45    # Door open duration after trigger
+lockout_seconds: 60    # Minimum time between triggers (debounces ToF)
+
+# ── Schedule (minutes since midnight) ─────────────────────────────────────────
+schedule:
+  open_start_min:  330    # 0530 - start of morning open window
+  prog_start_min:  540    # 0900 - switch to RFID+ToF programmed mode (weekdays)
+  night_start_min: 1320   # 2200 - switch to RFID-only night mode
+
+# ── File paths ────────────────────────────────────────────────────────────────
+# Defaults to ~/catdoor_state.txt and ~/catdoor.log if omitted.
+# state_file: "/home/pi/catdoor_state.txt"
+# log_file:   "/home/pi/catdoor.log"
