@@ -133,7 +133,7 @@ The LEDs mirror the override state directly: yellow lit = open override, red lit
 
 ## Run Chicken door
 
-The door itself is wired internally and powered by its own batteries or external supply. The Pi communicates with it **only over BLE** — there are no wired connections between the Pi and the door. Just make sure the Pi is within Bluetooth range (a few meters with line-of-sight, less through walls).
+The door itself is wired internally and powered by its own batteries but I am using a 5v USB-A dummy battery at 3V to power the door.  With frequent openings the batteries drain relatively quick.  This requires soldering to the battery case on the chicken door and the 5V USB runs off a port on Pi5, have had no issues; or any external supply. The Pi communicates with it **only over BLE** — there are no wired connections between the Pi and the door. Just make sure the Pi is within Bluetooth range (a few meters with line-of-sight, less through walls).
 
 Discover the door's MAC address with:
 
